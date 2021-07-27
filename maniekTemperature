@@ -11,38 +11,59 @@ if (isset($argv[1]) && ($argv[1] == 'config')) {
 }
 
 
-function showConfigValue($valueName) {
-    echo 'graph_vlabel maniektemp_' . $valueName . "\n";
-    echo 'maniektemp_' . $valueName . '.label maniektemp_' . $valueName . "\n";
-    echo 'maniektemp_' . $valueName . ".graph_category sensors\n";
+function showConfigValue($sensorId) {
+    echo 'graph_vlabel maniektemp_' . $sensorId . "\n";
+    echo 'maniektemp_' . $sensorId . '.label maniektemp_' . $sensorId . "\n";
+    echo 'maniektemp_' . $sensorId . ".graph_category sensors\n";
 }
 
-function showValue($valueName, $temperature) {
-    echo 'maniektemp_' . $valueName . '.value ' . $temperature . "\n";
+function showValue($sensorId, $temperature) {
+    echo 'maniektemp_' . $sensorId . '.value ' . $temperature . "\n";
 }
 
 function showConfig($tty) {
     echo "graph_title ManiekTemperature\n";
     $temperatures = getTemperatures($tty);
 
-    for ($index = 0; $index < count($temperatures); $index++) {
-        showConfigValue($index);
-    };
+    foreach ($temperatures as $sensorId => $temperature) {
+        showConfigValue($sensorId);
+    }
 }
 
 function showValues($tty) {
     $temperatures = getTemperatures($tty);
 
-    for ($index = 0; $index < count($temperatures); $index++) {
-        showValue($index, $temperatures[$index]);
-    };
+    foreach ($temperatures as $sensorId => $temperature) {
+        showValue($sensorId, $temperature);
+    }
 }
+
+function before($needle, $inthat) {
+    return substr($inthat, 0, strpos($inthat, $needle));
+};
+
+function between($needle1, $needle2, $inthat) {
+    return before($needle2, after($needle1, $inthat));
+};
+
+function after($needle, $inthat) {
+    if (!is_bool(strpos($inthat, $needle)))
+        return substr($inthat, strpos($inthat, $needle) + strlen($needle));
+};
 
 function getTemperatures($tty) {
     $fileHandle = fopen($tty, 'r');
-    $temperaturesString = trim(fgets($fileHandle));
+    $temperaturesString = fgets($fileHandle);        // let's skip one line to be sure we get string from the beginning
+    $temperaturesString = fgets($fileHandle);
     fclose($fileHandle);
-    $temperatures = array_filter(explode(';', $temperaturesString), 'is_numeric');
-    // echo $temperaturesString;
+    $temperaturePairs = explode(';', $temperaturesString);
+
+    $temperatures = array();
+    foreach ($temperaturePairs as $temperatureString) {
+        $sensorId = between('_', '=', $temperatureString);
+        $temperature = after('=', $temperatureString);
+        $temperatures[$sensorId] = $temperature;
+    }
+
     return $temperatures;
 }

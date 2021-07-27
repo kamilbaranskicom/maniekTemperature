@@ -1,6 +1,8 @@
 # maniekTemperature
 <a href="http://munin-monitoring.org/">munin</a> plugin to monitor temperatures from Maniek custom temperature device
 
+<img src="screenshot.png">
+
 ## INSTALL
 * Set the tty device (`$tty=` line).
 * Copy the file to `/etc/munin/plugins` (or to `/usr/share/munin/plugins/` and then `ln -s /usr/share/munin/plugins/maniekTemperature /etc/munin/plugins/`).

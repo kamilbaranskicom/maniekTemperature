@@ -6,7 +6,7 @@
 ## INSTALL
 * Set the tty device (`$tty=` line).
 * Copy the file to `/etc/munin/plugins` (or to `/usr/share/munin/plugins/` and then `ln -s /usr/share/munin/plugins/maniekTemperature /etc/munin/plugins/`).
-* Check if $tty is accessible by munin (you can do it by running the plugin from the munin user: `sudo -u munin /etc/munin/plugins/maniekTemperature`), if not allow for it (for example with `chmod 666 /dev/ttyUSB0`).
+* Check if $tty is accessible by munin (you can do it by running the plugin like munin does: `munin-run maniektemperature`), if not allow for it (for example with `chmod 666 /dev/ttyUSB0`).
 
 ## ABOUT Maniek custom temperature device
 ```

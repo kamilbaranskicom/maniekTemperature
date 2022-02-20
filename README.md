@@ -27,7 +27,8 @@ save - zapisuje aktualne ustawienia
 ```
 
 ## REQUIREMENTS
-PHP
-Arduino
-DS18B20 sensor(s)
-optional: second Arduino and two nRF24L01 transceivers
+* Munin
+* PHP
+* Arduino
+* DS18B20 sensor(s)
+* optional: second Arduino and two nRF24L01 transceivers
